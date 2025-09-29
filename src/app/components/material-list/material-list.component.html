@@ -1,0 +1,116 @@
+<div class="material-list-container">
+  <div class="header">
+    <h2>📦 Lista de Materiales</h2>
+    <div class="actions">
+      <button
+        *ngIf="isArquitecto"
+        class="btn btn-primary"
+        (click)="router.navigate(['/materials/new'])">
+        ➕ Nuevo Material
+      </button>
+    </div>
+  </div>
+
+  <!-- Alertas de Stock para Materiales -->
+  <app-stock-alerts></app-stock-alerts>
+
+  <!-- Buscador -->
+  <div class="search-section">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        placeholder="🔍 Buscar por nombre o código..."
+        class="search-input">
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ Cargando materiales...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="alert alert-error">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <!-- Lista de materiales -->
+  <div *ngIf="!loading && !error" class="materials-section">
+    <!-- Resultados de búsqueda -->
+    <div *ngIf="searchTerm" class="search-results">
+      <p>📊 Mostrando {{ filteredMaterials.length }} de {{ materials.length }} materiales</p>
+    </div>
+
+    <!-- Sin materiales -->
+    <div *ngIf="filteredMaterials.length === 0 && !searchTerm" class="no-materials">
+      <div class="empty-state">
+        <h3>📦 No hay materiales registrados</h3>
+        <p>Cuando se agreguen materiales, aparecerán aquí.</p>
+        <button
+          *ngIf="isArquitecto"
+          class="btn btn-primary"
+          (click)="router.navigate(['/materials/new'])">
+          ➕ Agregar Primer Material
+        </button>
+      </div>
+    </div>
+
+    <!-- Sin resultados de búsqueda -->
+    <div *ngIf="filteredMaterials.length === 0 && searchTerm" class="no-results">
+      <div class="empty-state">
+        <h3>🔍 No se encontraron materiales</h3>
+        <p>No hay materiales que coincidan con "{{ searchTerm }}"</p>
+        <button class="btn btn-secondary" (click)="searchTerm = ''; onSearch()">
+          Limpiar búsqueda
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid de materiales -->
+    <div *ngIf="filteredMaterials.length > 0" class="materials-grid">
+      <div *ngFor="let material of filteredMaterials" class="material-card">
+        <div class="material-header">
+          <h3 class="material-name">{{ material.materialName }}</h3>
+          <div class="material-code">{{ material.code || 'Sin código' }}</div>
+        </div>
+
+        <div class="material-body">
+          <div class="stock-info">
+            <span class="stock-label">Stock:</span>
+            <span [class]="getStockClass(material.quantity)" class="stock-value">
+              {{ material.quantity }} unidades
+            </span>
+            <span [class]="getStockClass(material.quantity)" class="stock-status">
+              {{ getStockLabel(material.quantity) }}
+            </span>
+          </div>
+
+          <div class="material-id">
+            <span class="id-label">ID:</span>
+            <span class="id-value">#{{ material.id }}</span>
+          </div>
+        </div>
+
+        <div class="material-actions">
+          <button
+            *ngIf="isArquitecto"
+            class="btn btn-warning btn-sm"
+            (click)="editMaterial(material)"
+            title="Editar material">
+            ✏️ Editar
+          </button>
+
+          <button
+            *ngIf="isArquitecto"
+            class="btn btn-danger btn-sm"
+            (click)="deleteMaterial(material.id!, material.materialName)"
+            title="Eliminar material">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

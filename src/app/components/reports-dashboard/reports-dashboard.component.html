@@ -1,0 +1,175 @@
+<div class="reports-dashboard-container">
+  <div class="header">
+    <h2>📊 Dashboard de Reportes</h2>
+    <div class="actions">
+      <button class="btn btn-secondary" (click)="refreshData()" [disabled]="loading">
+        {{ loading ? '⏳' : '🔄' }} Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ Cargando datos del dashboard...</p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div id="dashboard-content" class="dashboard-content">
+    
+    <!-- Resumen de Estadísticas -->
+    <div class="stats-section">
+      <h3>📈 Resumen Ejecutivo</h3>
+      <div class="stats-grid">
+        <!-- Construcciones -->
+        <div class="stat-card construction-stats">
+          <div class="stat-header">
+            <h4>🏗️ Construcciones</h4>
+          </div>
+          <div class="stat-body">
+            <div class="main-stat">{{ stats.totalConstructions }}</div>
+            <div class="stat-label">Total</div>
+            <div class="sub-stats">
+              <div class="sub-stat">
+                <span class="value">{{ stats.pendingConstructions }}</span>
+                <span class="label">Pendientes</span>
+              </div>
+              <div class="sub-stat">
+                <span class="value">{{ stats.inProgressConstructions }}</span>
+                <span class="label">En Proceso</span>
+              </div>
+              <div class="sub-stat">
+                <span class="value">{{ stats.completedConstructions }}</span>
+                <span class="label">Finalizadas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Materiales -->
+        <div class="stat-card material-stats">
+          <div class="stat-header">
+            <h4>📦 Materiales</h4>
+          </div>
+          <div class="stat-body">
+            <div class="main-stat">{{ stats.totalMaterials }}</div>
+            <div class="stat-label">Total</div>
+            <div class="sub-stats">
+              <div class="sub-stat warning" *ngIf="stats.lowStockMaterials > 0">
+                <span class="value">{{ stats.lowStockMaterials }}</span>
+                <span class="label">Stock Bajo</span>
+              </div>
+              <div class="sub-stat danger" *ngIf="stats.outOfStockMaterials > 0">
+                <span class="value">{{ stats.outOfStockMaterials }}</span>
+                <span class="label">Agotados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado General -->
+        <div class="stat-card system-stats">
+          <div class="stat-header">
+            <h4>🔧 Estado del Sistema</h4>
+          </div>
+          <div class="stat-body">
+            <div class="system-status">
+              <div class="status-item">
+                <span class="status-icon" [class]="stats.outOfStockMaterials === 0 ? 'success' : 'warning'">
+                  {{ stats.outOfStockMaterials === 0 ? '✅' : '⚠️' }}
+                </span>
+                <span class="status-text">Inventario</span>
+              </div>
+              <div class="status-item">
+                <span class="status-icon success">✅</span>
+                <span class="status-text">Sistema</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos o Datos Adicionales -->
+    <div class="charts-section">
+      <h3>📊 Análisis Detallado</h3>
+      
+      <!-- Construcciones por Tipo -->
+      <div class="chart-card" *ngIf="constructions.length > 0">
+        <h4>🏗️ Construcciones por Tipo</h4>
+        <div class="construction-types">
+          <div *ngFor="let type of getConstructionTypesSummary()" class="type-item">
+            <span class="type-name">{{ type.name }}</span>
+            <span class="type-count">{{ type.count }}</span>
+            <div class="type-bar">
+              <div class="type-fill" [style.width.%]="(type.count / stats.totalConstructions) * 100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Materiales Críticos -->
+      <div class="chart-card" *ngIf="getCriticalMaterials().length > 0">
+        <h4>⚠️ Materiales Críticos</h4>
+        <div class="critical-materials">
+          <div *ngFor="let material of getCriticalMaterials()" class="material-item">
+            <span class="material-name">{{ material.materialName }}</span>
+            <span class="material-code">({{ material.code }})</span>
+            <span class="material-stock" [class]="getStockClass(material.quantity)">
+              {{ material.quantity }} unidades
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de Generación de Reportes -->
+  <div class="report-actions">
+    <h3>📄 Generar Reportes PDF</h3>
+    <div class="report-buttons">
+      <button 
+        class="btn btn-primary report-btn" 
+        (click)="generateCompleteReport()" 
+        [disabled]="loading">
+        <span class="btn-icon">📋</span>
+        <div class="btn-content">
+          <span class="btn-title">Reporte Completo</span>
+          <span class="btn-description">Incluye construcciones, materiales y estadísticas</span>
+        </div>
+      </button>
+
+      <button 
+        class="btn btn-info report-btn" 
+        (click)="generateConstructionReport()" 
+        [disabled]="loading">
+        <span class="btn-icon">🏗️</span>
+        <div class="btn-content">
+          <span class="btn-title">Reporte de Construcciones</span>
+          <span class="btn-description">Estado y detalles de todas las construcciones</span>
+        </div>
+      </button>
+
+      <button 
+        class="btn btn-warning report-btn" 
+        (click)="generateMaterialReport()" 
+        [disabled]="loading">
+        <span class="btn-icon">📦</span>
+        <div class="btn-content">
+          <span class="btn-title">Reporte de Materiales</span>
+          <span class="btn-description">Inventario y estado de stock</span>
+        </div>
+      </button>
+
+      <button 
+        class="btn btn-success report-btn" 
+        (click)="generateDashboardReport()" 
+        [disabled]="loading">
+        <span class="btn-icon">📊</span>
+        <div class="btn-content">
+          <span class="btn-title">Reporte del Dashboard</span>
+          <span class="btn-description">Captura visual del dashboard actual</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

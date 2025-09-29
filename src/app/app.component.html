@@ -1,0 +1,28 @@
+<!-- Barra de navegación -->
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <h1>🏗️ CityFuture</h1>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a>
+      <a routerLink="/constructions" routerLinkActive="active">🏗️ Construcciones</a>
+      <a routerLink="/materials" routerLinkActive="active">🧱 Materiales</a>
+      <a routerLink="/reports" routerLinkActive="active">📈 Reportes</a>
+      <a routerLink="/login" class="login-link">🔐 Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>&copy; 2025 CityFuture - Sistema de Gestión de Construcciones</p>
+    <p>Conectado con Spring Boot API en puerto 8084</p>
+  </div>
+</footer>

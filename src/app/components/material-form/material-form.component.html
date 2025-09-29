@@ -1,0 +1,95 @@
+<div class="material-form-container">
+  <div class="header">
+    <h2>{{ isEditing ? '✏️ Editar Material' : '➕ Nuevo Material' }}</h2>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ {{ isEditing ? 'Actualizando' : 'Creando' }} material...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <div *ngIf="success" class="alert alert-success">
+    <p>✅ {{ success }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" class="material-form">
+    <!-- Nombre del Material -->
+    <div class="form-group">
+      <label for="materialName">Nombre del Material *</label>
+      <input
+        type="text"
+        id="materialName"
+        formControlName="materialName"
+        class="form-control"
+        placeholder="Ej: Cemento Portland"
+        [class.error]="materialName?.invalid && materialName?.touched">
+      
+      <div *ngIf="materialName?.invalid && materialName?.touched" class="error-message">
+        <span *ngIf="materialName?.errors?.['required']">El nombre del material es requerido</span>
+        <span *ngIf="materialName?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+      </div>
+    </div>
+
+    <!-- Código del Material -->
+    <div class="form-group">
+      <label for="code">Código del Material *</label>
+      <input
+        type="text"
+        id="code"
+        formControlName="code"
+        class="form-control"
+        placeholder="Ej: CEM-001"
+        [class.error]="code?.invalid && code?.touched">
+      
+      <div *ngIf="code?.invalid && code?.touched" class="error-message">
+        <span *ngIf="code?.errors?.['required']">El código del material es requerido</span>
+        <span *ngIf="code?.errors?.['minlength']">El código debe tener al menos 2 caracteres</span>
+      </div>
+    </div>
+
+    <!-- Cantidad en Stock -->
+    <div class="form-group">
+      <label for="quantity">Cantidad en Stock *</label>
+      <input
+        type="number"
+        id="quantity"
+        formControlName="quantity"
+        class="form-control"
+        placeholder="0"
+        min="0"
+        [class.error]="quantity?.invalid && quantity?.touched">
+      
+      <div *ngIf="quantity?.invalid && quantity?.touched" class="error-message">
+        <span *ngIf="quantity?.errors?.['required']">La cantidad es requerida</span>
+        <span *ngIf="quantity?.errors?.['min']">La cantidad no puede ser negativa</span>
+      </div>
+      
+      <div class="help-text">
+        <p>💡 Esta cantidad se reducirá automáticamente cuando se creen construcciones que requieran este material.</p>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="loading">
+        Cancelar
+      </button>
+      
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="materialForm.invalid || loading">
+        {{ isEditing ? 'Actualizar' : 'Crear' }} Material
+      </button>
+    </div>
+  </form>
+</div>

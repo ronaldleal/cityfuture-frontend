@@ -1,0 +1,133 @@
+<div class="construction-form-container">
+  <div class="header">
+    <h2>{{ isEditing ? '✏️ Editar Construcción' : '➕ Nueva Construcción' }}</h2>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ {{ isEditing ? 'Actualizando' : 'Creando' }} construcción...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <div *ngIf="success" class="alert alert-success">
+    <p>✅ {{ success }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="constructionForm" (ngSubmit)="onSubmit()" class="construction-form">
+    <!-- Nombre del Proyecto -->
+    <div class="form-group">
+      <label for="projectName">Nombre del Proyecto *</label>
+      <input
+        type="text"
+        id="projectName"
+        formControlName="projectName"
+        class="form-control"
+        placeholder="Ej: Torre Residencial Central"
+        [class.error]="projectName?.invalid && projectName?.touched">
+      
+      <div *ngIf="projectName?.invalid && projectName?.touched" class="error-message">
+        <span *ngIf="projectName?.errors?.['required']">El nombre del proyecto es requerido</span>
+        <span *ngIf="projectName?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres</span>
+      </div>
+    </div>
+
+    <!-- Tipo de Construcción -->
+    <div class="form-group">
+      <label for="typeConstruction">Tipo de Construcción *</label>
+      <select
+        id="typeConstruction"
+        formControlName="typeConstruction"
+        class="form-control"
+        [class.error]="typeConstruction?.invalid && typeConstruction?.touched">
+        <option value="">Seleccionar tipo...</option>
+        <option *ngFor="let type of constructionTypes" [value]="type">
+          {{ getTypeLabel(type) }}
+        </option>
+      </select>
+      
+      <div *ngIf="typeConstruction?.invalid && typeConstruction?.touched" class="error-message">
+        <span *ngIf="typeConstruction?.errors?.['required']">El tipo de construcción es requerido</span>
+      </div>
+    </div>
+
+    <!-- Requerimientos de Materiales -->
+    <app-material-requirements 
+      *ngIf="typeConstruction?.value" 
+      [constructionType]="typeConstruction?.value">
+    </app-material-requirements>
+
+    <!-- Ubicación -->
+    <div class="location-section">
+      <h3>📍 Ubicación</h3>
+      
+      <div class="coordinates-row">
+        <!-- Latitud -->
+        <div class="form-group flex-1">
+          <label for="latitude">Latitud *</label>
+          <input
+            type="number"
+            id="latitude"
+            formControlName="latitude"
+            class="form-control"
+            placeholder="Ej: 4.60971"
+            step="any"
+            [class.error]="latitude?.invalid && latitude?.touched">
+          
+          <div *ngIf="latitude?.invalid && latitude?.touched" class="error-message">
+            <span *ngIf="latitude?.errors?.['required']">La latitud es requerida</span>
+            <span *ngIf="latitude?.errors?.['min'] || latitude?.errors?.['max']">
+              La latitud debe estar entre -90 y 90
+            </span>
+          </div>
+        </div>
+
+        <!-- Longitud -->
+        <div class="form-group flex-1">
+          <label for="longitude">Longitud *</label>
+          <input
+            type="number"
+            id="longitude"
+            formControlName="longitude"
+            class="form-control"
+            placeholder="Ej: -74.08175"
+            step="any"
+            [class.error]="longitude?.invalid && longitude?.touched">
+          
+          <div *ngIf="longitude?.invalid && longitude?.touched" class="error-message">
+            <span *ngIf="longitude?.errors?.['required']">La longitud es requerida</span>
+            <span *ngIf="longitude?.errors?.['min'] || longitude?.errors?.['max']">
+              La longitud debe estar entre -180 y 180
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="location-help">
+        <p>💡 Puedes usar <a href="https://www.google.com/maps" target="_blank">Google Maps</a> 
+           para obtener las coordenadas exactas. Haz clic derecho en el mapa y selecciona las coordenadas.</p>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="loading">
+        Cancelar
+      </button>
+      
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="constructionForm.invalid || loading">
+        {{ isEditing ? 'Actualizar' : 'Crear' }} Construcción
+      </button>
+    </div>
+  </form>
+</div>

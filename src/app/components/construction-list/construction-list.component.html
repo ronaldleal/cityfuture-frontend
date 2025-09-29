@@ -1,0 +1,89 @@
+<div class="construction-list-container">
+  <div class="header">
+    <h2>📋 Lista de Construcciones</h2>
+    <div class="actions">
+      <button
+        *ngIf="isArquitecto"
+        class="btn btn-primary"
+        routerLink="/constructions/new">
+        ➕ Nueva Construcción
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <label for="statusFilter">Filtrar por estado:</label>
+    <select id="statusFilter" (change)="filterByStatus($event.target?.value || 'all')" class="filter-select">
+      <option value="all">Todos</option>
+      <option value="Pendiente">Pendiente</option>
+      <option value="En_Progreso">En Progreso</option>
+      <option value="Finalizado">Finalizado</option>
+      <option value="Cancelado">Cancelado</option>
+    </select>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ Cargando construcciones...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error">
+    <p>❌ {{ error }}</p>
+    <button (click)="loadConstructions()" class="btn btn-secondary">🔄 Reintentar</button>
+  </div>
+
+  <!-- Lista de construcciones -->
+  <div *ngIf="!loading && !error" class="constructions-grid">
+    <div
+      *ngFor="let construction of constructions"
+      class="construction-card">
+
+      <div class="card-header">
+        <h3>🏗️ {{ construction.projectName }}</h3>
+        <span [class]="getStatusClass(construction.estado || '')">
+          {{ construction.estado }}
+        </span>
+      </div>
+
+      <div class="card-body">
+        <p><strong>🏷️ Tipo:</strong> {{ construction.typeConstruction }}</p>
+        <p><strong>📍 Ubicación:</strong>
+          Lat: {{ construction.location.latitude }},
+          Lng: {{ construction.location.longitude }}
+        </p>
+        <p *ngIf="construction.estimatedDays">
+          <strong>⏱️ Días estimados:</strong> {{ construction.estimatedDays }}
+        </p>
+        <p *ngIf="construction.entregaDate">
+          <strong>📅 Fecha de entrega:</strong> {{ construction.entregaDate | date:'dd/MM/yyyy' }}
+        </p>
+      </div>
+
+      <div class="card-actions" *ngIf="isArquitecto">
+        <button
+          class="btn btn-sm btn-secondary"
+          [routerLink]="['/constructions', construction.id, 'edit']">
+          ✏️ Editar
+        </button>
+        <button
+          class="btn btn-sm btn-danger"
+          (click)="deleteConstruction(construction.id!)">
+          🗑️ Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay construcciones -->
+  <div *ngIf="!loading && !error && constructions.length === 0" class="empty-state">
+    <p>📭 No se encontraron construcciones.</p>
+    <button
+      *ngIf="isArquitecto"
+      class="btn btn-primary"
+      routerLink="/constructions/new">
+      ➕ Crear primera construcción
+    </button>
+  </div>
+</div>
