@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { ConstructionListComponent } from './components/construction-list/construction-list.component';
 import { ConstructionFormComponent } from './components/construction-form/construction-form.component';
@@ -41,7 +41,7 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
     ApiService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: JwtInterceptor,
       multi: true
     },
     AuthGuard

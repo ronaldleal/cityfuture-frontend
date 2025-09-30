@@ -1,1 +1,83 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>CityFuture - Iniciar Sesión</h2>
+      <p>Accede a tu cuenta con JWT</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Campo Usuario -->
+      <div class="form-group">
+        <label for="username">Usuario:</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          class="form-control"
+          [class.is-invalid]="isFieldInvalid('username')"
+          placeholder="Ingresa tu usuario"
+        />
+        <div *ngIf="isFieldInvalid('username')" class="invalid-feedback">
+          El usuario es requerido
+        </div>
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input
+          type="password"
+          id="password"  
+          formControlName="password"
+          class="form-control"
+          [class.is-invalid]="isFieldInvalid('password')"
+          placeholder="Ingresa tu contraseña"
+        />
+        <div *ngIf="isFieldInvalid('password')" class="invalid-feedback">
+          La contraseña es requerida
+        </div>
+      </div>
+
+      <!-- Mensaje de Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Botón Login -->
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-login"
+        [disabled]="loading || loginForm.invalid"
+      >
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!loading" class="fas fa-sign-in-alt me-2"></i>
+        {{ loading ? 'Autenticando...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+
+    <!-- Usuarios de Prueba -->
+    <div class="test-users" *ngIf="availableUsers && Object.keys(availableUsers).length > 0">
+      <h5>Usuarios de Prueba:</h5>
+      <div class="users-grid">
+        <button 
+          *ngFor="let user of Object.keys(availableUsers)" 
+          type="button"
+          class="user-card btn"
+          (click)="selectUser(user, getPasswordFromDescription(availableUsers[user]))"
+        >
+          <strong>{{ user }}</strong>
+          <small>{{ availableUsers[user] }}</small>
+        </button>
+      </div>
+    </div>
+
+    <!-- Información JWT -->
+    <div class="jwt-info">
+      <small>
+        <i class="fas fa-shield-alt"></i>
+        Autenticación segura con JSON Web Tokens (JWT)
+      </small>
+    </div>
+  </div>
+</div>

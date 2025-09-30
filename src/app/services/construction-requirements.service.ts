@@ -20,39 +20,42 @@ export interface ConstructionRequirements {
 })
 export class ConstructionRequirementsService {
 
-  // Mapa de requerimientos de materiales por tipo de construcción
+  // Mapa de requerimientos de materiales por tipo de construcción (sincronizado con backend)
   private readonly materialRequirements: { [key: string]: { [materialCode: string]: number } } = {
     'CASA': {
-      'CEMENTO': 50,
-      'LADRILLO': 100,
-      'ACERO': 20,
-      'ARENA': 30
+      'Ce': 100,
+      'Gr': 50,
+      'Ar': 90,
+      'Ma': 20,
+      'Ad': 100
     },
     'EDIFICIO': {
-      'CEMENTO': 200,
-      'LADRILLO': 500,
-      'ACERO': 100,
-      'ARENA': 150,
-      'VIDRIO': 50
+      'Ce': 200,
+      'Gr': 100,
+      'Ar': 180,
+      'Ma': 40,
+      'Ad': 200
     },
     'CANCHA_FUTBOL': {
-      'CESPED': 1000,
-      'ARENA': 200,
-      'CEMENTO': 100,
-      'ACERO': 50
+      'Ce': 20,
+      'Gr': 20,
+      'Ar': 20,
+      'Ma': 20,
+      'Ad': 20
     },
     'LAGO': {
-      'CEMENTO': 80,
-      'ARENA': 100,
-      'ACERO': 30,
-      'PIEDRA': 200
+      'Ce': 50,
+      'Gr': 60,
+      'Ar': 80,
+      'Ma': 10,
+      'Ad': 20
     },
     'GIMNASIO': {
-      'CEMENTO': 120,
-      'LADRILLO': 300,
-      'ACERO': 80,
-      'ARENA': 100,
-      'VIDRIO': 30
+      'Ce': 50,
+      'Gr': 25,
+      'Ar': 45,
+      'Ma': 10,
+      'Ad': 50
     }
   };
 
@@ -114,13 +117,11 @@ export class ConstructionRequirementsService {
 
   private getMaterialName(materialCode: string): string {
     const nameMap: { [key: string]: string } = {
-      'CEMENTO': 'Cemento',
-      'LADRILLO': 'Ladrillo',
-      'ACERO': 'Acero',
-      'ARENA': 'Arena',
-      'VIDRIO': 'Vidrio',
-      'CESPED': 'Césped',
-      'PIEDRA': 'Piedra'
+      'Ce': 'Cemento',
+      'Gr': 'Grava',
+      'Ar': 'Arena',
+      'Ma': 'Madera',
+      'Ad': 'Adobe'
     };
     return nameMap[materialCode] || materialCode;
   }
