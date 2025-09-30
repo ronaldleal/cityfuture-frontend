@@ -53,11 +53,6 @@ const routes: Routes = [
     component: MaterialFormComponent
     // canActivate: [ArquitectoGuard] // Comentado temporalmente
   },
-  {
-    path: 'reports',
-    component: ReportsDashboardComponent
-    // canActivate: [AuthGuard] // Comentado temporalmente
-  },
 
   // Página de no autorizado
   {
