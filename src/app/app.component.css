@@ -56,6 +56,39 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Estilos para la información del usuario */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-greeting {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background-color: rgba(220, 53, 69, 0.8);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logout-btn:hover {
+  background-color: rgba(220, 53, 69, 1);
+  transform: translateY(-1px);
+}
+
 .main-content {
   min-height: calc(100vh - 140px);
   padding: 2rem 0;
@@ -91,6 +124,21 @@
   .nav-links a {
     padding: 0.5rem;
     font-size: 0.9rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .user-greeting {
+    font-size: 0.8rem;
+  }
+
+  .logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
 }
 

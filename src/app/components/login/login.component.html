@@ -38,6 +38,12 @@
         </div>
       </div>
 
+      <!-- Mensaje de Éxito -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        {{ successMessage }}
+      </div>
+
       <!-- Mensaje de Error -->
       <div *ngIf="errorMessage" class="alert alert-danger">
         <i class="fas fa-exclamation-triangle"></i>

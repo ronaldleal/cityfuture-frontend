@@ -5,10 +5,23 @@
       <h1>🏗️ CityFuture</h1>
     </div>
     <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a>
-      <a routerLink="/constructions" routerLinkActive="active">🏗️ Construcciones</a>
-      <a routerLink="/materials" routerLinkActive="active">🧱 Materiales</a>
-      <a routerLink="/login" class="login-link">🔐 Login</a>
+      <!-- Enlaces principales - solo visibles si está autenticado -->
+      <ng-container *ngIf="isAuthenticated()">
+        <a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a>
+        <a routerLink="/constructions" routerLinkActive="active">🏗️ Construcciones</a>
+        <a routerLink="/materials" routerLinkActive="active">🧱 Materiales</a>
+      </ng-container>
+      
+      <!-- Información del usuario y logout (solo si está autenticado) -->
+      <div *ngIf="isAuthenticated()" class="user-info">
+        <span class="user-greeting">👤 {{ getCurrentUsername() }}</span>
+        <button class="logout-btn" (click)="logout()" title="Cerrar Sesión">
+          🚪 Logout
+        </button>
+      </div>
+      
+      <!-- Botón de login (solo si NO está autenticado) -->
+      <a *ngIf="!isAuthenticated()" routerLink="/login" class="login-link">🔐 Login</a>
     </div>
   </div>
 </nav>
