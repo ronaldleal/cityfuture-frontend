@@ -154,6 +154,24 @@
   background: #545b62;
 }
 
+.form-control.readonly {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #dee2e6;
+}
+
+.form-control.readonly:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+
+
+
+
+
+
 /* Responsive design */
 @media (max-width: 768px) {
   .material-form-container {

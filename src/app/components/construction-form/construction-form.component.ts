@@ -17,7 +17,6 @@ export class ConstructionFormComponent implements OnInit {
   error: string | null = null;
   success: string | null = null;
 
-  // Tipos de construcción disponibles (sincronizados con el backend)
   constructionTypes = [
     'CASA',
     'LAGO',

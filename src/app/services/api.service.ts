@@ -13,15 +13,15 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   private getHttpOptions(): { headers: HttpHeaders } {
-    // Por ahora usamos credenciales del arquitecto para pruebas (tiene más permisos)
-    const username = 'arquitecto';
-    const password = '1234';
-    const basicAuthCredentials = btoa(`${username}:${password}`);
-    
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${basicAuthCredentials}`
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
     });
+
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    
     return { headers };
   }
 
@@ -38,9 +38,9 @@ export class ApiService {
           errorMessage = error.error?.message || 'Solicitud incorrecta';
           break;
         case 401:
-          errorMessage = 'No autorizado. Credenciales incorrectas';
-          // Opcional: redirigir al login
-          localStorage.removeItem('basicAuth');
+          errorMessage = 'No autorizado. Token inválido o expirado';
+          localStorage.removeItem('jwt_token');
+          localStorage.removeItem('current_user');
           break;
         case 403:
           errorMessage = 'Acceso prohibido. No tienes permisos suficientes';

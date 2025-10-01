@@ -27,7 +27,6 @@ export class MaterialFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Verificar si estamos en modo edición
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditing = true;

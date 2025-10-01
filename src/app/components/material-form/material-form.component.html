@@ -26,9 +26,11 @@
         id="materialName"
         formControlName="materialName"
         class="form-control"
-        placeholder="Ej: Cemento Portland"
-        [class.error]="materialName?.invalid && materialName?.touched">
-      
+        placeholder="Ej: CASA"
+        [readonly]="isEditing"
+        [class.error]="materialName?.invalid && materialName?.touched"
+        [class.readonly]="isEditing">
+
       <div *ngIf="materialName?.invalid && materialName?.touched" class="error-message">
         <span *ngIf="materialName?.errors?.['required']">El nombre del material es requerido</span>
         <span *ngIf="materialName?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
@@ -43,9 +45,11 @@
         id="code"
         formControlName="code"
         class="form-control"
-        placeholder="Ej: CEM-001"
-        [class.error]="code?.invalid && code?.touched">
-      
+        placeholder="Ej: CASA"
+        [readonly]="isEditing"
+        [class.error]="code?.invalid && code?.touched"
+        [class.readonly]="isEditing">
+
       <div *ngIf="code?.invalid && code?.touched" class="error-message">
         <span *ngIf="code?.errors?.['required']">El código del material es requerido</span>
         <span *ngIf="code?.errors?.['minlength']">El código debe tener al menos 2 caracteres</span>
@@ -63,12 +67,12 @@
         placeholder="0"
         min="0"
         [class.error]="quantity?.invalid && quantity?.touched">
-      
+
       <div *ngIf="quantity?.invalid && quantity?.touched" class="error-message">
         <span *ngIf="quantity?.errors?.['required']">La cantidad es requerida</span>
         <span *ngIf="quantity?.errors?.['min']">La cantidad no puede ser negativa</span>
       </div>
-      
+
       <div class="help-text">
         <p>💡 Esta cantidad se reducirá automáticamente cuando se creen construcciones que requieran este material.</p>
       </div>
@@ -83,7 +87,7 @@
         [disabled]="loading">
         Cancelar
       </button>
-      
+
       <button
         type="submit"
         class="btn btn-primary"

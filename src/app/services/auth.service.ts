@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 export interface User {
   username: string;
   authorities: Array<{authority: string}>;
-  role?: string; // Rol principal extraído
+  role?: string;
 }
 
 export interface LoginRequest {
@@ -17,10 +17,10 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  type: string; // "Bearer"
+  type: string;
   username: string;
   role: string;
-  expiresIn: number; // segundos
+  expiresIn: number;
 }
 
 export interface TokenInfo {
@@ -43,7 +43,6 @@ export class AuthService {
   private readonly userKey = 'current_user';
 
   constructor(private http: HttpClient) {
-    // Intentar recuperar usuario y token del localStorage al inicializar
     this.loadUserFromStorage();
   }
 
